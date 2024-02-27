@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 
 void main() {
@@ -44,6 +48,44 @@ class AudioPlayerScreen extends StatefulWidget {
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   late AudioPlayer _audioPlayer;
 
+  final _playlist = ConcatenatingAudioSource(
+    children: [
+      AudioSource.uri(
+        Uri.parse('asset:///assets/audio/396hz.mp3'),
+        tag: MediaItem(
+          id: '0',
+          title: 'İyileştirici',
+          artist: 'Spiroot',
+          artUri: Uri.parse(
+            'https://images.unsplash.com/photo-1554832307-e5e32d164958?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          ),
+        ),
+      ),
+      AudioSource.uri(
+        Uri.parse('asset:///assets/audio/639hz.mp3'),
+        tag: MediaItem(
+          id: '1',
+          title: 'İyileştirici',
+          artist: 'Spiroot',
+          artUri: Uri.parse(
+            'https://images.unsplash.com/photo-1554832307-e5e32d164958?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          ),
+        ),
+      ),
+      AudioSource.uri(
+        Uri.parse('asset:///assets/audio/852hz.mp3'),
+        tag: MediaItem(
+          id: '2',
+          title: 'İyileştirici',
+          artist: 'Spiroot',
+          artUri: Uri.parse(
+            'https://images.unsplash.com/photo-1554832307-e5e32d164958?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+          ),
+        ),
+      ),
+    ],
+  );
+
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
         _audioPlayer.positionStream,
@@ -56,7 +98,16 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _audioPlayer = AudioPlayer()..setAsset('assets/audio/396hz.mp3');
+    //_audioPlayer = AudioPlayer()..setAsset('assets/audio/396hz.mp3');
+    // _audioPlayer = AudioPlayer()
+    //   ..setUrl('https://www.youtube.com/watch?v=cDT7OitB17M');
+    _audioPlayer = AudioPlayer();
+    _init();
+  }
+
+  Future<void> _init() async {
+    await _audioPlayer.setLoopMode(LoopMode.all);
+    await _audioPlayer.setAudioSource(_playlist);
   }
 
   @override
@@ -101,23 +152,39 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            StreamBuilder<SequenceState?>(
+              stream: _audioPlayer.sequenceStateStream,
+              builder: (context, snapshot) {
+                final state = snapshot.data;
+                if (state?.sequence.isEmpty ?? true) {
+                  return const SizedBox();
+                }
+                final metadata = state!.currentSource!.tag as MediaItem;
+                return MediaMetaData(
+                  imageUrl: metadata.artUri.toString(),
+                  title: metadata.title,
+                  artist: metadata.artist ?? '',
+                );
+              },
+            ),
+            const SizedBox(height: 20),
             StreamBuilder<PositionData>(
               stream: _positionDataStream,
               builder: (context, snapshot) {
-                final positionData = snapshot.data;
+                final PositionData = snapshot.data;
                 return ProgressBar(
-                  barHeight: 7,
-                  baseBarColor: Colors.white,
-                  bufferedBarColor: Colors.grey,
+                  barHeight: 8,
+                  baseBarColor: Colors.grey[600],
+                  bufferedBarColor: Colors.grey[400],
                   progressBarColor: Colors.red,
                   thumbColor: Colors.red,
                   timeLabelTextStyle: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
                   ),
-                  progress: positionData?.position ?? Duration.zero,
-                  buffered: positionData?.bufferedPosition ?? Duration.zero,
-                  total: positionData?.duration ?? Duration.zero,
+                  progress: PositionData?.position ?? Duration.zero,
+                  buffered: PositionData?.bufferedPosition ?? Duration.zero,
+                  total: PositionData?.duration ?? Duration.zero,
                   onSeek: _audioPlayer.seek,
                 );
               },
@@ -127,6 +194,70 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MediaMetaData extends StatelessWidget {
+  const MediaMetaData({
+    required this.imageUrl,
+    required this.title,
+    required this.artist,
+    super.key,
+  });
+
+  final String imageUrl;
+  final String title;
+  final String artist;
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: avoid_redundant_argument_values, unnecessary_const
+    return Column(
+      children: [
+        DecoratedBox(
+          decoration: BoxDecoration(
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                offset: Offset(2, 4),
+                blurRadius: 4,
+              ),
+            ],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              height: 300,
+              width: 300,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          artist,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
     );
   }
 }
@@ -158,6 +289,7 @@ class Controls extends StatelessWidget {
             icon: const Icon(Icons.pause_rounded),
           );
         }
+
         return IconButton(
           onPressed: () => audioPlayer.seek(Duration.zero),
           iconSize: 75,
