@@ -56,7 +56,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _audioPlayer = AudioPlayer()..setAsset('assets/audio/369hz.MP3');
+    _audioPlayer = AudioPlayer()..setAsset('assets/audio/396hz.mp3');
   }
 
   @override
