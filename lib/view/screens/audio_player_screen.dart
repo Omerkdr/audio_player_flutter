@@ -21,7 +21,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   final _playlist = ConcatenatingAudioSource(
     children: [
       AudioSource.uri(
-        Uri.parse('asset:///assets/audio/396hz.mp3'),
+        Uri.parse(
+          'https://firebasestorage.googleapis.com/v0/b/striped-reserve-383101.appspot.com/o/sounds%2F396hz.mp3?alt=media&token=705339f6-6008-4c65-b038-2cca2c846177',
+        ),
         tag: MediaItem(
           id: '0',
           title: '396 hz',
@@ -32,7 +34,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         ),
       ),
       AudioSource.uri(
-        Uri.parse('asset:///assets/audio/639hz.mp3'),
+        Uri.parse(
+          'https://firebasestorage.googleapis.com/v0/b/striped-reserve-383101.appspot.com/o/sounds%2F639hz.mp3?alt=media&token=34c46379-7969-4ead-a9d1-0e0495089ccf',
+        ),
         tag: MediaItem(
           id: '1',
           title: '639 hz',
@@ -43,7 +47,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         ),
       ),
       AudioSource.uri(
-        Uri.parse('asset:///assets/audio/852hz.mp3'),
+        Uri.parse(
+          'https://firebasestorage.googleapis.com/v0/b/striped-reserve-383101.appspot.com/o/sounds%2F852hz.mp3?alt=media&token=d543df86-8dd4-43b2-9d9b-9cc8e8ed2b26',
+        ),
         tag: MediaItem(
           id: '2',
           title: '852 hz',
