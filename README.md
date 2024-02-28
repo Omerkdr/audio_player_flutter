@@ -1,16 +1,11 @@
-# auido_player
+Audio Player Application
+This Flutter application is designed to play audio from URLs while also fetching and displaying associated visuals. Additionally, it possesses the capability to run in the background.
 
-A new Flutter project.
 
-## Getting Started
+Features
+Audio Playback: Play audio from URLs.
+Visual Display: Fetch and display associated visuals (album art, etc.).
+Background Operation: Ability to operate in the background while other tasks are being performed.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![untitled](https://github.com/Omerkdr/audio_player_flutter/assets/73428550/7c1d14ce-f4fc-47e2-97a2-377ed70f71fe)
+![untitffled](https://github.com/Omerkdr/audio_player_flutter/assets/73428550/acd4e0e7-cd45-4f83-9bd7-4fda062c10ed)
