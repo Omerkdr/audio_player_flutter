@@ -53,7 +53,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         tag: MediaItem(
           id: '2',
           title: '852 hz',
-          artist: 'Spiroot',
+          artist: 'Spiroot App',
           artUri: Uri.parse(
             'https://images.unsplash.com/photo-1538024333176-f25f63f873ee?q=80&w=1886&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
           ),
